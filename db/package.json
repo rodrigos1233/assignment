@@ -1,0 +1,38 @@
+{
+	"name"           : "recruitment",
+	"version"        : "1.0.0",
+	"type"           : "module",
+	"description"    : "Recruitment Coding Assignment",
+	"main"           : "index.js",
+	"dependencies"   : {
+		"extract-zip"   : "^2.0.1",
+		"nano"          : "^9.0.5",
+		"open-cli"      : "^7.0.1",
+		"pm2"           : "^5.1.2",
+		"pouchdb-server": "^4.2.0",
+		"wait-on"       : "^6.0.1"
+	},
+	"scripts"        : {
+		"start"          : "npm run unpack && npm run start-db && npm run deploy-data",
+		"start-db"       : "pm2 start --mini-list pouchdb-server -- --dir data",
+		"start-db-inline": "pouchdb-server --dir data",
+		"deploy-data"    : "wait-on http://localhost:5984/_utils && npm run load-data && open-cli http://localhost:5984/_utils",
+		"stop"           : "pm2 delete --mini-list pouchdb-server",
+		"destroy"        : "npm run stop && npm run clean",
+		"unpack"         : "extract-zip collection.zip",
+		"clean"          : "rm -rf Artists.json Artworks.json config.json log.txt && rm -rf data",
+		"load-data"      : "node load.js"
+	},
+	"repository"     : {
+		"type": "git",
+		"url" : "git+https://github.com/myartbank/recruitment.git"
+	},
+	"license"        : "MIT",
+	"bugs"           : {
+		"url": "https://github.com/myartbank/recruitment/issues"
+	},
+	"homepage"       : "https://github.com/myartbank/recruitment#readme",
+	"devDependencies": {
+		"node-fetch": "^2.6.6"
+	}
+}
